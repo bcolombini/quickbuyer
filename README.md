@@ -1,5 +1,5 @@
-# quickbuyer
+# QuickBuyer
 
-#Getting Started
+# Getting Started
 
-##Configuration Quickbuyer 
+## Configuration Quickbuyer
