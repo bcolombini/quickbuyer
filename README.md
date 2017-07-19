@@ -6,7 +6,11 @@
 
 - In <b>setup.ini</b> you can configuration your <b>api_key</b> and <b>secret_api</b>. 
 - You need authorization to use quickbuyer in <b>setup.ini</b>
-- go to terminal and write <b>python buyer.py <amount btc want spent</b> Example: python buyer.py 0.08  
+- Go to terminal and write <b>python buyer.py <amount btc want spent</b> Example: python buyer.py 0.08  
+- Write the initial coin. Example: LTC
+- The software buy coin and put order for sell in 20%, remember you can change the percent in setup.ini
+- The quickbuyer have a emergency sell, if you wanna sell for any price, just press [enter], this action you cancel all open orders and sell for top price in bid.
+- Good lucky
 
 # Faq
 ### Bottini, where can i found my api_key and my secret_api?
