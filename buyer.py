@@ -5,6 +5,21 @@ import ConfigParser
 from bittrex import Bittrex
 from cryptopia_api import Api
 
+
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
+import uuid
+import datetime
+
+# Use a service account
+cred = credentials.Certificate('firebase.json')
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()
+doc_ref = db.collection('PUMP')
+
 config = ConfigParser.ConfigParser()
 config.read("setup.ini")
 
@@ -21,6 +36,11 @@ while True:
     for x in range(0,len(my_actual)):
         if('/BTC' in my_past[x]['Label'] and my_actual[x]['Change']-my_past[x]['Change'] > 1):
             print(my_actual[x]['Label'] + " - "+ str(my_actual[x]['Change']-my_past[x]['Change']) + "%")
+            doc_ref.document(str(uuid.uuid1())).set({
+                u'COIN': my_actual[x]['Label'],
+                u'PERCENT': my_actual[x]['Change']-my_past[x]['Change'],
+                u'DATE':datetime.datetime.now()
+            })
     my_past = my_actual      
     
 
