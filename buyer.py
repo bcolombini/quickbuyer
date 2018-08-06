@@ -18,7 +18,7 @@ cred = credentials.Certificate('firebase.json')
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
-doc_ref = db.collection('PUMP')
+doc_ref = db.collection('PUMP-02')
 
 config = ConfigParser.ConfigParser()
 config.read("setup.ini")
@@ -29,19 +29,29 @@ if (config.get("TERMS", "USE") == "FALSE"):
 bit = Api(config.get("API", "key"), config.get("API", "secret"))
 
 my_past = bit.get_markets()[0]
+turns = 0
+tempo = time.time()
 
 while True:
-    print("=========START NEW VERIFICATION=========")
-    my_actual = bit.get_markets()[0]
-    for x in range(0,len(my_actual)):
-        if('/BTC' in my_past[x]['Label'] and my_actual[x]['Change']-my_past[x]['Change'] > 1):
-            print(my_actual[x]['Label'] + " - "+ str(my_actual[x]['Change']-my_past[x]['Change']) + "%")
-            doc_ref.document(str(uuid.uuid1())).set({
-                u'COIN': my_actual[x]['Label'],
-                u'PERCENT': my_actual[x]['Change']-my_past[x]['Change'],
-                u'DATE':datetime.datetime.now()
-            })
-    my_past = my_actual      
+    try:
+        print("=========START NEW VERIFICATION=========")
+        turns += 1
+        my_actual = bit.get_markets()[0]
+        for x in range(0,len(my_actual)):
+            if('/BTC' in my_past[x]['Label'] and my_actual[x]['Change']-my_past[x]['Change'] > 30):
+                print(my_actual[x]['Label'] + " - "+ str(my_actual[x]['Change']-my_past[x]['Change']) + "%")
+                doc_ref.document(str(uuid.uuid1())).set({
+                    u'COIN': my_actual[x]['Label'],
+                    u'PERCENT': my_actual[x]['Change']-my_past[x]['Change'],
+                    u'DATE':datetime.datetime.now()
+                })
+        if(turns == 3):
+            print(str(time.time()-tempo) + " - UPDATE MY PAST")
+            my_past = my_actual      
+            turns = 0
+            tempo = time.time()
+    except Exception as e:
+        print(e) 
     
 
 
