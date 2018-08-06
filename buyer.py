@@ -33,9 +33,9 @@ amount = myBalanceBtc / float(priceFuture)
 amount = amount - amount * 0.01
 priceSell = 0.0005 / amount
 
-a = time.time()
-print(bit.submit_trade(coinMarket, 'Buy',priceFuture,amount))
-print("[INFO] - " + str(time.time() - a) + ' - BUYING')
+# a = time.time()
+# print(bit.submit_trade(coinMarket, 'Buy',priceFuture,amount))
+# print("[INFO] - " + str(time.time() - a) + ' - BUYING')
 
 print(
     "[INFO] - " + str(datetime.datetime.now()) + " - " + str(time.time() - tempo) + " - BALANCE: " + str(myBalanceBtc))
@@ -53,7 +53,18 @@ print(
 print(
     "[INFO] - " + str(datetime.datetime.now()) + " - " + str(time.time() - tempo) + " - BTC TOTAL: " + str(priceSell*amount))
 
+if(config.get("SELL", "AUTO") == "TRUE"):
+    a = time.time()
+    print(bit.submit_trade(coinMarket, 'Sell',priceActual * float(config.get("SELL", "PERCENT")),amount))
+    print("[INFO] - " + str(time.time() - a) + ' - ORDER WITH 20 PERCENT TO SELL')
+
 raw_input("PRESS [ENTER] TO CANCEL ORDER AND EMERGENCY SELL")
+
+if(config.get("SELL", "AUTO") == "TRUE"):
+    a = time.time()
+    print(bit.cancel_all_trade())
+    print("[INFO] - " + str(time.time() - a) + ' - CANCELLING ORDERS')
+
 
 a = time.time()
 print(bit.submit_trade(coinMarket, 'Sell',priceSell+0.00000001,amount))
