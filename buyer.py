@@ -33,9 +33,9 @@ amount = myBalanceBtc / float(priceFuture)
 amount = amount - amount * 0.01
 priceSell = 0.0005 / amount
 
-# a = time.time()
-# print(bit.submit_trade(coinMarket, 'Buy',priceFuture,amount))
-# print("[INFO] - " + str(time.time() - a) + ' - BUYING')
+a = time.time()
+print(bit.submit_trade(coinMarket, 'Buy',priceFuture,amount))
+print("[INFO] - " + str(time.time() - a) + ' - BUYING')
 
 print(
     "[INFO] - " + str(datetime.datetime.now()) + " - " + str(time.time() - tempo) + " - BALANCE: " + str(myBalanceBtc))
